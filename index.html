@@ -33,9 +33,7 @@
     font-family: 'Noto Sans TC', sans-serif;
     background: var(--surface);
     color: var(--text);
-    height: 100%;
-    overflow: hidden;
-    position: fixed;
+    min-height: 100%;
     width: 100%;
   }
 
@@ -43,13 +41,11 @@
   .app-shell {
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
+    min-height: 100dvh;
     max-width: 480px;
     margin: 0 auto;
     background: var(--white);
     box-shadow: 0 0 60px rgba(0,0,0,0.15);
-    overflow: hidden;
   }
 
   /* ── HEADER ── */
@@ -122,6 +118,9 @@
     gap: 6px;
     overflow-x: auto;
     scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
   }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab {
@@ -152,10 +151,7 @@
   /* ── SCROLLABLE BODY ── */
   .app-body {
     flex: 1;
-    overflow-y: auto;
     overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    scroll-behavior: smooth;
   }
   .app-body::-webkit-scrollbar { width: 3px; }
   .app-body::-webkit-scrollbar-track { background: transparent; }
@@ -476,11 +472,55 @@
     overflow: hidden;
   }
   .overview-bg-circle {
-    position: absolute; right: -30px; top: -30px;
-    width: 150px; height: 150px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  /* 大圓 — 右/上/下 三邊裁切，z-index 最高 */
+  .overview-circle-big {
+    position: absolute;
+    right: -35px;
+    top: -22px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    background: rgba(196,150,26,0.08);
-    border: 1px solid rgba(196,150,26,0.12);
+    overflow: hidden;
+    border: 2px solid rgba(196,150,26,0.55);
+    box-shadow: 0 0 0 5px rgba(196,150,26,0.09);
+    z-index: 2;
+  }
+  .overview-circle-big img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0.92;
+  }
+  /* 小圓 — 緊靠大圓左側，壓在大圓下層 */
+  .overview-circle-small {
+    position: absolute;
+    right: 118px;
+    top: 42px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(196,150,26,0.35);
+    box-shadow: 0 0 0 4px rgba(196,150,26,0.06);
+    z-index: 1;
+  }
+  .overview-circle-small img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0.85;
   }
   .overview-title {
     font-family: 'Noto Serif TC', serif;
@@ -799,6 +839,54 @@
     color: var(--text2);
     line-height: 1.8;
   }
+
+  /* ── HERO CIRCLE IMAGE ── */
+  .hero-circle-img {
+    position: absolute;
+    right: -35px;
+    top: -22px;
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid rgba(196,150,26,0.45);
+    box-shadow: 0 0 0 5px rgba(196,150,26,0.08);
+    z-index: 0;
+    pointer-events: none;
+  }
+  .hero-circle-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+    opacity: 0.5;
+    mix-blend-mode: luminosity;
+  }
+  /* ensure text above circle */
+  .day-num, .day-main-title, .day-subtitle, .day-meals-strip {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ── SPOT CARD: LEFT IMAGE RIGHT TEXT ── */
+  .spot-card-inner {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .spot-thumb {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    object-fit: cover;
+    flex-shrink: 0;
+    display: block;
+  }
+  .spot-card-text {
+    flex: 1;
+    min-width: 0;
+  }
 </style>
 </head>
 <body>
@@ -837,7 +925,14 @@
     <!-- ══ OVERVIEW ══ -->
     <div id="screen-overview" class="screen active">
       <div class="overview-hero">
-        <div class="overview-bg-circle"></div>
+        <div class="overview-bg-circle">
+          <div class="overview-circle-big">
+            <img src="photo/hoi-an-overview.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=400&q=80'">
+          </div>
+          <div class="overview-circle-small">
+            <img src="photo/overview-circle-2.jpg" alt="" onerror="this.src='https://images.unsplash.com/photo-1483683804023-6ccdb62f86ef?w=200&q=80'">
+          </div>
+        </div>
         <div class="overview-title">越南<span>峴港</span><br>五日之旅</div>
         <div class="overview-meta">2026年4月25日（六）出發<br>2026年4月29日（三）回程</div>
         <div class="overview-stats">
@@ -906,6 +1001,7 @@
     <!-- ══ DAY 1 ══ -->
     <div id="screen-day1" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/day1-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">DAY 1 · 4月25日（六）</div>
         <div class="day-main-title">抵達峴港<br>探索城市地標</div>
         <div class="day-subtitle"><i class="fa-solid fa-plane-arrival" style="color:var(--gold);margin-right:4px"></i>桃園機場 → 峴港機場</div>
@@ -924,31 +1020,31 @@
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?dragon-bridge,danang" alt="龍橋" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>龍橋</div>
-          <div class="spot-desc">2003年落成，全長666公尺，橫跨漢江東西兩岸。整座橋以金龍為造型，是峴港最具代表性地標，入夜配合燈光更加迷人壯麗。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Dragon+Bridge+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-dragon-bridge.jpg" alt="龍橋" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>龍橋</div><div class="spot-desc">2003年落成，全長666公尺，橫跨漢江東西兩岸。整座橋以金龍為造型，是峴港最具代表性地標，入夜配合燈光更加迷人壯麗。</div><a class="map-btn" href="https://maps.google.com/?q=Dragon+Bridge+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?pink-cathedral,danang,vietnam" alt="粉紅大教堂" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>粉紅大教堂</div>
-          <div class="spot-desc">建於1923年法國殖民時期，為越南中部最大的西方教堂，外牆以粉紅色為主，塔頂有公雞風向標，又稱「公雞教堂」，屬哥德式建築風格。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Da+Nang+Cathedral+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-pink-cathedral.jpg" alt="粉紅大教堂" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>粉紅大教堂</div><div class="spot-desc">建於1923年法國殖民時期，為越南中部最大的西方教堂，外牆以粉紅色為主，塔頂有公雞風向標，又稱「公雞教堂」，屬哥德式建築風格。</div><a class="map-btn" href="https://maps.google.com/?q=Da+Nang+Cathedral+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?love-lock-bridge,danang" alt="峴港愛情鎖橋" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>峴港愛情鎖橋</div>
-          <div class="spot-desc">橫跨漢江的浪漫地標，遊客在此掛上愛情鎖，寄託對愛情的祝願，並可眺望漢江兩岸美景。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Love+Lock+Bridge+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-love-bridge.jpg" alt="峴港愛情鎖橋" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>峴港愛情鎖橋</div><div class="spot-desc">橫跨漢江的浪漫地標，遊客在此掛上愛情鎖，寄託對愛情的祝願，並可眺望漢江兩岸美景。</div><a class="map-btn" href="https://maps.google.com/?q=Love+Lock+Bridge+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?son-tra,peninsula,vietnam" alt="山茶半島" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>山茶半島</div>
-          <div class="spot-desc">海拔693米，整個半島約60平方公里，山上觀音像高達67公尺（據稱亞洲第一高）。寺廟匾額與對聯均為正體中文，已規劃為森林保護區，珍稀動物有爪哇猴、長尾猴等。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Son+Tra+Peninsula+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-son-tra.jpg" alt="山茶半島" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>山茶半島</div><div class="spot-desc">海拔693米，整個半島約60平方公里，山上觀音像高達67公尺（據稱亞洲第一高）。寺廟匾額與對聯均為正體中文，已規劃為森林保護區，珍稀動物有爪哇猴、長尾猴等。</div><a class="map-btn" href="https://maps.google.com/?q=Son+Tra+Peninsula+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
 
@@ -1002,6 +1098,7 @@
     <!-- ══ DAY 2 ══ -->
     <div id="screen-day2" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/day2-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">DAY 2 · 4月26日（日）</div>
         <div class="day-main-title">會安古鎮<br>迦南島生態體驗</div>
         <div class="day-subtitle"><i class="fa-solid fa-landmark" style="color:var(--gold);margin-right:4px"></i>UNESCO 世界文化遺產 × 竹籃船體驗</div>
@@ -1019,30 +1116,31 @@
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?basket-boat,vietnam,coconut" alt="迦南島竹籃船" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>迦南島原生態體驗</div>
-          <div class="spot-desc">從會安碼頭搭乘船前往對岸迦南島，島上密布水椰林與欖榔樹。體驗搭乘傳統竹桶船穿越原始自然生態，並觀賞漁夫精彩的圓形籃船旋轉特技表演！</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Cam+Nam+Island+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-basket-boat.jpg" alt="迦南島原生態體驗" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>迦南島原生態體驗</div><div class="spot-desc">從會安碼頭搭乘船前往對岸迦南島，島上密布水椰林與欖榔樹。體驗搭乘傳統竹桶船穿越原始自然生態，並觀賞漁夫精彩的圓形籃船旋轉特技表演！</div><a class="map-btn" href="https://maps.google.com/?q=Cam+Nam+Island+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?hoi-an,lanterns,ancient-town" alt="會安古鎮燈籠" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>來遠橋</div>
-          <div class="spot-desc">西元1593年由日本人所建造的木造拱橋，連結日本城與中國城。橋上有屋頂及北側小寺廟，據傳猴年興建、狗年完成，兩側入口分別由猴子與狗守護。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Japanese+Covered+Bridge+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-japanese-bridge.jpg" alt="來遠橋" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>來遠橋</div><div class="spot-desc">西元1593年由日本人所建造的木造拱橋，連結日本城與中國城。橋上有屋頂及北側小寺廟，據傳猴年興建、狗年完成，兩側入口分別由猴子與狗守護。</div><a class="map-btn" href="https://maps.google.com/?q=Japanese+Covered+Bridge+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?hoi-an,temple,vietnam" alt="廣筆會館" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>廣筆會館</div>
-          <div class="spot-desc">建於1786年，由廣東商人與肇州同鄉興建，正殿供奉關公，入口兩側繪有桃園結義彩圖，館內有華麗水池與九頭龍像。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Cantonese+Assembly+Hall+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-cantonese-hall.jpg" alt="廣筆會館" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>廣筆會館</div><div class="spot-desc">建於1786年，由廣東商人與肇州同鄉興建，正殿供奉關公，入口兩側繪有桃園結義彩圖，館內有華麗水池與九頭龍像。</div><a class="map-btn" href="https://maps.google.com/?q=Cantonese+Assembly+Hall+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>進記古宅</div>
-          <div class="spot-desc">會安最古老也是保留最完整的古宅之一。17世紀融合中日越三大民族文化特色，花費8年建造，至今保持原始風格。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Tan+Ky+Ancient+House+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-tan-ky-house.jpg" alt="進記古宅" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>進記古宅</div><div class="spot-desc">會安最古老也是保留最完整的古宅之一。17世紀融合中日越三大民族文化特色，花費8年建造，至今保持原始風格。</div><a class="map-btn" href="https://maps.google.com/?q=Tan+Ky+Ancient+House+Hoi+An" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
 
@@ -1082,21 +1180,24 @@
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-bread-slice"></i>法國麵包 Bánh Mì Phượng</div>
-          <div class="spot-desc">米其林必比登推薦！被評為「全球最好吃的越南法國麵包」之一，外皮酥脆、內餡豐富，有多種口味可選。在地人與觀光客都大排長龍，來會安絕對不能錯過！</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/A1Pxsqi9JUdDJebx6" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-banh-mi.jpg" alt="法國麵包 Bánh Mì Phượng" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-bread-slice"></i>法國麵包 Bánh Mì Phượng</div><div class="spot-desc">米其林必比登推薦！被評為「全球最好吃的越南法國麵包」之一，外皮酥脆、內餡豐富，有多種口味可選。在地人與觀光客都大排長龍，來會安絕對不能錯過！</div><a class="map-btn" href="https://maps.app.goo.gl/A1Pxsqi9JUdDJebx6" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-bowl-food"></i>越南河粉 Phở Cơm Linh</div>
-          <div class="spot-desc">網紅推薦的會安在地越南料理餐廳，供應正宗越南河粉、米飯與各式家常菜，份量紮實、價格實惠，深受當地人喜愛。</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/tAHLi18RXpJwo84a8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-pho-com-linh.jpg" alt="越南河粉 Phở Cơm Linh" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-bowl-food"></i>越南河粉 Phở Cơm Linh</div><div class="spot-desc">網紅推薦的會安在地越南料理餐廳，供應正宗越南河粉、米飯與各式家常菜，份量紮實、價格實惠，深受當地人喜愛。</div><a class="map-btn" href="https://maps.app.goo.gl/tAHLi18RXpJwo84a8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-mug-hot"></i>蛋咖啡 Uncle Huan Coffee</div>
-          <div class="spot-desc">越南特色蛋咖啡（Cà Phê Trứng），以濃縮咖啡搭配打發蛋黃奶霜製成，口感濃郁綿密，是近年風靡全東南亞的網紅飲品，來了不喝可惜！</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/2smL1y5qGVq6rhiN8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-egg-coffee.jpg" alt="蛋咖啡 Uncle Huan Coffee" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-mug-hot"></i>蛋咖啡 Uncle Huan Coffee</div><div class="spot-desc">越南特色蛋咖啡（Cà Phê Trứng），以濃縮咖啡搭配打發蛋黃奶霜製成，口感濃郁綿密，是近年風靡全東南亞的網紅飲品，來了不喝可惜！</div><a class="map-btn" href="https://maps.app.goo.gl/2smL1y5qGVq6rhiN8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
       <div class="bottom-spacer"></div>
@@ -1105,6 +1206,7 @@
     <!-- ══ DAY 3 ══ -->
     <div id="screen-day3" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/day3-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">DAY 3 · 4月27日（一）</div>
         <div class="day-main-title">巴拿山纜車<br>黃金橋 × 夢想樂園</div>
         <div class="day-subtitle"><i class="fa-solid fa-cable-car" style="color:var(--gold);margin-right:4px"></i>金氏世界紀錄纜車 × 雲端黃金橋</div>
@@ -1122,24 +1224,24 @@
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?cable-car,mountain,vietnam" alt="巴拿山纜車" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>巴拿山纜車</div>
-          <div class="spot-desc">CNN評為「世界最令人印象深刻的10條登山纜車之一」，擁有兩項金氏世界紀錄。路線長達5,801公尺，單程約20分鐘；落差高度約1,290公尺。腳下盡是樹林石澗，身處雲海當中。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Ba+Na+Hills+Cable+Car+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-cable-car.jpg" alt="巴拿山纜車" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>巴拿山纜車</div><div class="spot-desc">CNN評為「世界最令人印象深刻的10條登山纜車之一」，擁有兩項金氏世界紀錄。路線長達5,801公尺，單程約20分鐘；落差高度約1,290公尺。腳下盡是樹林石澗，身處雲海當中。</div><a class="map-btn" href="https://maps.google.com/?q=Ba+Na+Hills+Cable+Car+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?golden-bridge,ba-na-hills,vietnam" alt="巨手黃金橋" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>巨手黃金橋 Golden Bridge</div>
-          <div class="spot-desc">斥資20億美元，全長150公尺。由巨大雙手托起，屹立海拔約1,400公尺的雲霧之上，融合大自然美景與建築美學，更帶有一點禪意，是越南最著名的打卡景點。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Golden+Bridge+Ba+Na+Hills+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-golden-bridge.jpg" alt="巨手黃金橋" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>巨手黃金橋 Golden Bridge</div><div class="spot-desc">斥資20億美元，全長150公尺。由巨大雙手托起，屹立海拔約1,400公尺的雲霧之上，融合大自然美景與建築美學，更帶有一點禪意，是越南最著名的打卡景點。</div><a class="map-btn" href="https://maps.google.com/?q=Golden+Bridge+Ba+Na+Hills+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?theme-park,castle,amusement" alt="夢想樂園" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>夢想樂園 Fantasy Park</div>
-          <div class="spot-desc">世界三大室內娛樂公園之一，設施包括：大怒神、音樂快車、騎樓遊戲、侏羅紀公園、鐵軌卡車、搖擺騎馬比賽、室內靶場、小汽車比賽、探險鬼屋、3D電影等。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Fantasy+Park+Ba+Na+Hills" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-fantasy-park.jpg" alt="夢想樂園" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>夢想樂園 Fantasy Park</div><div class="spot-desc">世界三大室內娛樂公園之一，設施包括：大怒神、音樂快車、騎樓遊戲、侏羅紀公園、鐵軌卡車、搖擺騎馬比賽、室內靶場、小汽車比賽、探險鬼屋、3D電影等。</div><a class="map-btn" href="https://maps.google.com/?q=Fantasy+Park+Ba+Na+Hills" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
 
@@ -1165,21 +1267,24 @@
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-coffee"></i>Starbucks Ba Na Hills</div>
-          <div class="spot-desc">坐在雲端星巴克喝咖啡，居高臨下俯瞰山谷，氣氛絕佳！可享用飲品與輕食，順便在法國村廣場旁拍美照。</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/G7fKWNjRL8XyGED37" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-starbucks-bana.jpg" alt="Starbucks Ba Na Hills" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-coffee"></i>Starbucks Ba Na Hills</div><div class="spot-desc">坐在雲端星巴克喝咖啡，居高臨下俯瞰山谷，氣氛絕佳！可享用飲品與輕食，順便在法國村廣場旁拍美照。</div><a class="map-btn" href="https://maps.app.goo.gl/G7fKWNjRL8XyGED37" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-plate-wheat"></i>義大利麵 Gemination</div>
-          <div class="spot-desc">巴拿山上的義大利料理餐廳，提供義大利麵、燉飯等西式料理，環境舒適，適合想吃輕食的旅客，是法國村內用餐的好選擇。</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/N14RXsVSB3HWjDyM9" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-gemination.jpg" alt="義大利麵 Gemination" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-plate-wheat"></i>義大利麵 Gemination</div><div class="spot-desc">巴拿山上的義大利料理餐廳，提供義大利麵、燉飯等西式料理，環境舒適，適合想吃輕食的旅客，是法國村內用餐的好選擇。</div><a class="map-btn" href="https://maps.app.goo.gl/N14RXsVSB3HWjDyM9" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-pizza-slice"></i>Pizza Brasserie</div>
-          <div class="spot-desc">巴拿山法國村內的披薩餐廳，提供現烤披薩與各式西式簡餐，適合一家大小，在玩樂之餘補充體力的好選擇。</div>
-          <a class="map-btn" href="https://maps.app.goo.gl/vgzw2DEnKsVA4QBz8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-pizza-brasserie.jpg" alt="Pizza Brasserie" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-pizza-slice"></i>Pizza Brasserie</div><div class="spot-desc">巴拿山法國村內的披薩餐廳，提供現烤披薩與各式西式簡餐，適合一家大小，在玩樂之餘補充體力的好選擇。</div><a class="map-btn" href="https://maps.app.goo.gl/vgzw2DEnKsVA4QBz8" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
 
@@ -1235,6 +1340,7 @@
     <!-- ══ DAY 4 ══ -->
     <div id="screen-day4" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/day4-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">DAY 4 · 4月28日（二）</div>
         <div class="day-main-title">五行山<br>購物 & 美溪沙灘</div>
         <div class="day-subtitle"><i class="fa-solid fa-mountain" style="color:var(--gold);margin-right:4px"></i>韓江市場 × VINCOM PLAZA × 烤肉吃到飽</div>
@@ -1252,29 +1358,31 @@
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?marble-mountains,danang,vietnam" alt="五行山" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>五行山（大理石山）</div>
-          <div class="spot-desc">根據五行而命名：金木水火土五座山，以水山最大最高也最著名。特別安排搭乘觀景電梯登山步行下山，沿途欣賞越南中部特有秀麗風景。山上有許多寺廟和洞穴，昔日占婆族的聖地。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Marble+Mountains+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-marble-mountains.jpg" alt="五行山" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>五行山（大理石山）</div><div class="spot-desc">根據五行而命名：金木水火土五座山，以水山最大最高也最著名。特別安排搭乘觀景電梯登山步行下山，沿途欣賞越南中部特有秀麗風景。山上有許多寺廟和洞穴，昔日占婆族的聖地。</div><a class="map-btn" href="https://maps.google.com/?q=Marble+Mountains+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>韓江市場</div>
-          <div class="spot-desc">峴港最知名的傳統市場，販售各種在地特色商品、食品及伴手禮，是體驗在地生活的好去處。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Han+Market+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-han-market.jpg" alt="韓江市場" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>韓江市場</div><div class="spot-desc">峴港最知名的傳統市場，販售各種在地特色商品、食品及伴手禮，是體驗在地生活的好去處。</div><a class="map-btn" href="https://maps.google.com/?q=Han+Market+Da+Nang+Vietnam" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>VINCOM PLAZA 購物中心</div>
-          <div class="spot-desc">峴港最大的購物中心，設有服飾品牌、家電用品、餐廳、咖啡店等。超市VinMart可購買咖啡、果乾和腰果、泡麵等伴手禮。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=Vincom+Plaza+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-vincom.jpg" alt="VINCOM PLAZA 購物中心" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>VINCOM PLAZA 購物中心</div><div class="spot-desc">峴港最大的購物中心，設有服飾品牌、家電用品、餐廳、咖啡店等。超市VinMart可購買咖啡、果乾和腰果、泡麵等伴手禮。</div><a class="map-btn" href="https://maps.google.com/?q=Vincom+Plaza+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
 
         <div class="spot-card">
-          <img class="spot-img" src="https://source.unsplash.com/featured/?my-khe-beach,danang,vietnam" alt="美溪沙灘" loading="lazy" onerror="this.style.display='none'">
-          <div class="spot-name"><i class="fa-solid fa-location-dot"></i>美溪沙灘</div>
-          <div class="spot-desc">在世界六大美麗沙灘之一享受擁抱與親吻大自然的洗禮。沙灘海岸連綿三十多公里，風景美麗，海水清澈見底，是許多中外旅客必遊的拍攝地。</div>
-          <a class="map-btn" href="https://maps.google.com/?q=My+Khe+Beach+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a>
+          <div class="spot-card-inner">
+            <img class="spot-thumb" src="photo/spot-my-khe.jpg" alt="美溪沙灘" onerror="this.style.display=\'none\'">
+            <div class="spot-card-text"><div class="spot-name"><i class="fa-solid fa-location-dot"></i>美溪沙灘</div><div class="spot-desc">在世界六大美麗沙灘之一享受擁抱與親吻大自然的洗禮。沙灘海岸連綿三十多公里，風景美麗，海水清澈見底，是許多中外旅客必遊的拍攝地。</div><a class="map-btn" href="https://maps.google.com/?q=My+Khe+Beach+Da+Nang" target="_blank"><i class="fa-solid fa-map-location-dot"></i>Google Maps</a></div>
+          </div>
         </div>
       </div>
 
@@ -1310,6 +1418,7 @@
     <!-- ══ DAY 5 ══ -->
     <div id="screen-day5" class="screen">
       <div class="day-hero" style="background: linear-gradient(135deg,#2C2416,#1A1410);">
+        <div class="hero-circle-img"><img src="photo/day5-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">DAY 5 · 4月29日（三）</div>
         <div class="day-main-title">自由時光<br>返程桃園</div>
         <div class="day-subtitle"><i class="fa-solid fa-plane-departure" style="color:var(--gold);margin-right:4px"></i>峴港機場 → 桃園機場</div>
@@ -1359,6 +1468,7 @@
     <!-- ══ OPTIONAL ══ -->
     <div id="screen-optional" class="screen">
       <div class="day-hero" style="background: linear-gradient(135deg,#2C1F08,#1A1410);">
+        <div class="hero-circle-img"><img src="photo/optional-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num"><i class="fa-solid fa-tag" style="margin-right:5px"></i>自費行程</div>
         <div class="day-main-title">可選自費項目</div>
         <div class="day-subtitle">以下費用均不含在團費中，請自行決定是否參加</div>
@@ -1599,6 +1709,7 @@
     <!-- ══ CONTACT ══ -->
     <div id="screen-contact" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/contact-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">緊急聯絡</div>
         <div class="day-main-title">車隊領隊<br>服務窗口</div>
         <div class="day-subtitle"><i class="fa-solid fa-headset" style="color:var(--gold);margin-right:4px"></i>旅途中有任何問題，請直接聯繫</div>
@@ -1713,6 +1824,7 @@
     <!-- ══ NOTES ══ -->
     <div id="screen-notes" class="screen">
       <div class="day-hero">
+        <div class="hero-circle-img"><img src="photo/notes-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
         <div class="day-num">行前準備</div>
         <div class="day-main-title">重要提醒<br>旅遊貼心小叮嚀</div>
         <div class="day-subtitle"><i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:4px"></i>出發前請務必確認以下事項</div>
@@ -1838,7 +1950,7 @@ function showScreen(id, tabEl) {
     tabEl.classList.add('active');
     tabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
-  document.querySelector('.app-body').scrollTop = 0;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 </script>
 </body>

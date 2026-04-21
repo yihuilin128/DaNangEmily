@@ -1115,8 +1115,6 @@
     <button class="nav-tab"          onclick="showScreen('day4',this)"><i class="fa-solid fa-calendar-day"></i>Day 4</button>
     <button class="nav-tab"          onclick="showScreen('day5',this)"><i class="fa-solid fa-calendar-day"></i>Day 5</button>
     <button class="nav-tab"          onclick="showScreen('optional',this)"><i class="fa-solid fa-tag"></i>自費</button>
-    <button class="nav-tab"          onclick="showScreen('contact',this)"><i class="fa-solid fa-phone"></i>聯絡</button>
-    <button class="nav-tab"          onclick="showScreen('notes',this)"><i class="fa-solid fa-circle-info"></i>提醒</button>
     <button class="nav-tab"          onclick="showScreen('list',this)"><i class="fa-solid fa-cart-shopping"></i>清單</button>
   </nav>
 
@@ -2223,317 +2221,18 @@
     </div>
 
 
-    <!-- ══ CONTACT ══ -->
-    <div id="screen-contact" class="screen">
-      <div class="day-hero">
-        <div class="hero-circle-img"><img loading="lazy" decoding="async" src="photo/contact-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
-        <div class="day-num">緊急聯絡</div>
-        <div class="day-main-title">車隊領隊<br>服務窗口</div>
-        <div class="day-subtitle"><i class="fa-solid fa-headset" style="color:var(--gold);margin-right:4px"></i>旅途中有任何問題，請直接聯繫</div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-bus"></i></div>
-          <div class="section-title">車隊領隊</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="contact-table">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-user"></i>A車 林旭恆 先生</div>
-            <div class="contact-value"><a href="tel:0989320307">0989-320-307</a></div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-user"></i>B車 廖小萩 小姐</div>
-            <div class="contact-value"><a href="tel:0935983414">0935-983-414</a></div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-user"></i>C車 劉姿吟 小姐</div>
-            <div class="contact-value"><a href="tel:0955543681">0955-543-681</a></div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-user"></i>D車 黃蕎萱 小姐</div>
-            <div class="contact-value"><a href="tel:0987319478">0987-319-478</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-building-user"></i></div>
-          <div class="section-title">東南旅遊服務窗口</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="contact-table">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-user-tie"></i>田逸婕 小姐</div>
-            <div class="contact-value"><a href="tel:0912523947">0912-523-947</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-plane"></i></div>
-          <div class="section-title">機場送機人員</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="contact-table">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-plane"></i>長榮（代表號）</div>
-            <div class="contact-value"><a href="tel:0988236335">0988-236-335</a></div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-plane"></i>中華（代表號）</div>
-            <div class="contact-value"><a href="tel:0933920300">0933-920-300</a></div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-map-pin"></i></div>
-          <div class="section-title">出發集合資訊</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="contact-table">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-clock"></i>接駁車發車</div>
-            <div class="contact-value" style="color:var(--gold);font-weight:700">4/25 凌晨 3:45</div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-location-dot"></i>集合地點</div>
-            <div class="contact-value" style="font-size:12px">新北市新店區<br>民權路88號（第一銀行／門口）</div>
-          </div>
-        </div>
-        <div class="contact-table" style="margin-top:8px">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-plane-departure"></i>長榮 機場集合</div>
-            <div class="contact-value" style="font-size:12px">第二航廈 長榮20號<br>凌晨 4:45</div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-plane-departure"></i>中華 機場集合</div>
-            <div class="contact-value" style="font-size:12px">第一航廈 中華11號<br>凌晨 4:45</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-hotel"></i></div>
-          <div class="section-title">飯店聯絡</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="contact-table">
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-hotel"></i>會安南岸新世界</div>
-            <div class="contact-value"><a href="tel:+842358586999">+84 235-858-6999</a></div>
-          </div>
-          <div class="contact-row">
-            <div class="contact-label"><i class="fa-solid fa-hotel"></i>峴港城中皇冠假日</div>
-            <div class="contact-value"><a href="tel:+842367307999">+84 236-7307-999</a></div>
-          </div>
-        </div>
-      </div>
-      <div class="bottom-spacer"></div>
-    </div>
-
-    <!-- ══ NOTES ══ -->
-    <div id="screen-notes" class="screen">
-      <div class="day-hero">
-        <div class="hero-circle-img"><img loading="lazy" decoding="async" src="photo/notes-hero.jpg" alt="" onerror="this.parentElement.style.display='none'"></div>
-        <div class="day-num">行前準備</div>
-        <div class="day-main-title">重要提醒<br>旅遊貼心小叮嚀</div>
-        <div class="day-subtitle"><i class="fa-solid fa-circle-info" style="color:var(--gold);margin-right:4px"></i>出發前請務必確認以下事項</div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-passport"></i></div>
-          <div class="section-title">護照 & 證件</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="alert-box">
-          <i class="fa-solid fa-triangle-exclamation alert-icon"></i>
-          <div class="alert-text"><strong>護照效期要求：</strong><br>請攜帶效期至 <strong>2026年10月29日之後</strong> 的護照正本（從回國之日起算需有六個月以上效期）。</div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-cloud-sun"></i></div>
-          <div class="section-title">氣候 & 衣著</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-cloud-sun" style="color:var(--gold)"></i>越南4月氣溫</div>
-          <div class="info-card-body">約 <strong>24～34°C</strong>，以夏季服裝為主，建議穿著容易穿脫的衣服及鞋子。</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-bag-shopping" style="color:var(--gold)"></i>建議攜帶物品</div>
-          <div class="info-card-body">牙膏、牙刷、拖鞋、刮鬍刀、帽子、護膚乳液、太陽眼鏡、個人常用藥品（防曬乳、腸胃藥、感冒藥等）、薄外套（遊覽車冷氣強、巴拿山）、摺疊雨傘</div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-clock"></i></div>
-          <div class="section-title">時差 & 電壓</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-clock" style="color:var(--gold)"></i>時差</div>
-          <div class="info-card-body">越南比台灣<strong>慢1小時</strong><br>台灣 中午12點 = 越南 上午11點</div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-bolt" style="color:var(--gold)"></i>電壓</div>
-          <div class="info-card-body">越南電壓為 <strong>220V</strong>，台灣為110V。<br>飯店配有國際插座，無需另外帶轉接頭。</div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-coins"></i></div>
-          <div class="section-title">貨幣 & 匯率</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-money-bill-wave" style="color:var(--gold)"></i>越南盾（DONG）</div>
-          <div class="info-card-body">
-            1 美元 ≈ 約 20,000 盾<br>
-            1 台幣 ≈ 約 750～770 盾<br>
-            <span style="color:var(--text3);font-size:12px">※ 以當日牌告匯率為準</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-suitcase-rolling"></i></div>
-          <div class="section-title">行李限制</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-suitcase" style="color:var(--gold)"></i>行李規定</div>
-          <div class="info-card-body">
-            托運行李：可免費托運 <strong>1件，重量上限 23 公斤</strong><br>
-            手提行李：<strong>1件，重量上限 7 公斤</strong>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-hand-holding-dollar"></i></div>
-          <div class="section-title">小費參考</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-hand-holding-dollar" style="color:var(--gold)"></i>越南小費文化</div>
-          <div class="info-card-body">
-            按摩小費：約 <strong>80,000～100,000 盾／次</strong><br>
-            迦南島竹船小費：約 <strong>20,000～30,000 盾／人</strong><br>
-            飯店房務：約 <strong>10,000～20,000 盾／天</strong><br>
-            <span style="color:var(--text3);font-size:12px">※ 小費非強制，視服務品質自行斟酌</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-scale-balanced"></i></div>
-          <div class="section-title">台灣海關規定</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-money-bills" style="color:var(--gold)"></i>入出境攜帶現金限額</div>
-          <div class="info-card-body">
-            外幣現金出境：不可超過 <strong>美金 1萬元</strong>（旅行支票不限）<br>
-            新台幣出境：不可超過 <strong>新台幣 10萬元</strong>
-          </div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-box-open" style="color:var(--gold)"></i>入境台灣免稅規定</div>
-          <div class="info-card-body">
-            酒類：<strong>1公升</strong>以內免稅<br>
-            菸類：捲菸 <strong>200支</strong>、雪茄 <strong>25支</strong>或菸絲 <strong>1磅</strong>擇一<br>
-            其他商品：完稅價格合計不超過 <strong>新台幣 2萬元</strong>免稅<br>
-            <span style="color:var(--text3);font-size:12px">※ 超過免稅限額須主動向海關申報</span>
-          </div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-ban" style="color:var(--gold)"></i>越南出境禁止攜帶</div>
-          <div class="info-card-body">
-            越南盾現金不得超過 <strong>1,500萬盾</strong><br>
-            外幣現金超過 <strong>USD 5,000</strong> 須申報<br>
-            珍稀動植物、未申報文物古董禁止出境<br>
-            <span style="color:var(--text3);font-size:12px">※ 購買仿冒品亦屬違法，請勿攜帶</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="content-section">
-        <div class="section-header">
-          <div class="section-icon"><i class="fa-solid fa-phone"></i></div>
-          <div class="section-title">撥打電話回台灣</div>
-          <div class="section-line"></div>
-        </div>
-        <div class="info-card">
-          <div class="info-card-title"><i class="fa-solid fa-mobile-screen" style="color:var(--gold)"></i>撥打方式</div>
-          <div class="info-card-body">
-            市話：<strong>00 + 886 + 區域碼 + 電話號碼</strong><br>
-            手機：<strong>00 + 886 + (去0) 手機號碼</strong><br>
-            例如：0912-345-678 → 00-886-912-345-678
-          </div>
-        </div>
-      </div>
-      <div class="bottom-spacer"></div>
-    </div>
-
-  
     <!-- ══ LIST ══ -->
     <div id="screen-list" class="screen">
       <div class="day-hero" style="background:linear-gradient(135deg,#1A1410,#2C1A2E)">
         <div class="day-num"><i class="fa-solid fa-cart-shopping" style="margin-right:5px"></i>購物清單</div>
         <div class="day-main-title">採買清單<br>旅遊備忘錄</div>
-        <div class="day-subtitle"><i class="fa-solid fa-lock" style="color:var(--gold);margin-right:4px"></i>個人專屬，需解鎖才能編輯</div>
+        <div class="day-subtitle"><i class="fa-solid fa-cart-shopping" style="color:var(--gold);margin-right:4px"></i>記錄想買的東西，出發前不忘帶回家</div>
       </div>
 
-      <!-- 解鎖區 -->
-      <div id="list-lock-screen" style="padding:24px 16px;text-align:center">
-        <div style="font-size:48px;margin-bottom:16px">🔒</div>
-        <div style="font-size:16px;font-weight:700;color:var(--text);margin-bottom:8px">請輸入密碼解鎖</div>
-        <div style="font-size:13px;color:var(--text3);margin-bottom:20px">清單內容已加密保護</div>
-        <div style="display:flex;gap:8px;max-width:280px;margin:0 auto">
-          <input id="list-pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="輸入密碼（預設 1234）"
-            style="flex:1;height:48px;padding:0 14px;font-size:16px;border:1.5px solid #EDE3CC;border-radius:var(--radius);background:var(--white);color:var(--text);outline:none;font-family:inherit;text-align:center;letter-spacing:4px"
-            onkeydown="if(event.key==='Enter')unlockList()">
-          <button onclick="unlockList()"
-            style="height:48px;padding:0 18px;background:var(--gold);color:var(--dark);border:none;border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:700;font-family:inherit;flex-shrink:0">
-            解鎖
-          </button>
-        </div>
-        <div id="list-pin-error" style="color:#c0392b;font-size:12px;margin-top:10px;display:none">密碼錯誤，請再試一次</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:16px">可在解鎖後更改密碼</div>
-      </div>
+      <!-- 清單主畫面 -->
+      <div id="list-main" style="display:block">
 
-      <!-- 清單主畫面（解鎖後顯示）-->
-      <div id="list-main" style="display:none">
 
-        <!-- 工具列 -->
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface);border-bottom:1px solid #EDE3CC">
-          <span style="font-size:12px;color:var(--text3)"><i class="fa-solid fa-unlock" style="color:var(--gold);margin-right:4px"></i>已解鎖</span>
-          <div style="display:flex;gap:8px">
-            <button onclick="showChangePinDialog()"
-              style="padding:6px 12px;background:transparent;color:var(--text3);border:1px solid #EDE3CC;border-radius:20px;font-size:11px;cursor:pointer;font-family:inherit">
-              <i class="fa-solid fa-key"></i> 改密碼
-            </button>
-            <button onclick="lockList()"
-              style="padding:6px 12px;background:var(--dark2);color:var(--gold-light);border:none;border-radius:20px;font-size:11px;cursor:pointer;font-family:inherit">
-              <i class="fa-solid fa-lock"></i> 鎖定
-            </button>
-          </div>
-        </div>
 
         <!-- 新增項目 -->
         <div style="padding:16px">
@@ -2573,21 +2272,6 @@
               <i class="fa-solid fa-cart-shopping" style="font-size:32px;color:#EDE3CC;display:block;margin-bottom:10px"></i>
               清單是空的，快加入第一項吧！
             </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 改密碼彈窗 -->
-      <div id="change-pin-dialog" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;display:none;align-items:center;justify-content:center">
-        <div style="background:var(--white);border-radius:var(--radius);padding:24px;width:280px;margin:0 auto">
-          <div style="font-size:16px;font-weight:700;margin-bottom:16px;text-align:center">更改密碼</div>
-          <input id="new-pin-input" type="password" inputmode="numeric" maxlength="6" placeholder="新密碼（數字）"
-            style="width:100%;height:44px;padding:0 14px;font-size:16px;border:1.5px solid #EDE3CC;border-radius:var(--radius-sm);outline:none;font-family:inherit;text-align:center;letter-spacing:4px;margin-bottom:10px">
-          <div style="display:flex;gap:8px">
-            <button onclick="changePinConfirm()"
-              style="flex:1;height:42px;background:var(--gold);color:var(--dark);border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">確認</button>
-            <button onclick="document.getElementById('change-pin-dialog').style.display='none'"
-              style="flex:1;height:42px;background:var(--surface);color:var(--text);border:1px solid #EDE3CC;border-radius:var(--radius-sm);font-size:14px;cursor:pointer;font-family:inherit">取消</button>
           </div>
         </div>
       </div>
@@ -2714,41 +2398,9 @@ function toggleSpa(id){
 
 
 // ══ 清單功能 ══
-var LIST_PIN_KEY = 'yh_list_pin';
 var LIST_DATA_KEY = 'yh_list_data';
-function getPin(){ return localStorage.getItem(LIST_PIN_KEY) || '1234'; }
 function getListData(){ try{ return JSON.parse(localStorage.getItem(LIST_DATA_KEY)||'[]'); }catch(e){ return []; } }
 function saveListData(data){ localStorage.setItem(LIST_DATA_KEY, JSON.stringify(data)); }
-
-function unlockList(){
-  var pin = document.getElementById('list-pin-input').value;
-  if(pin === getPin()){
-    document.getElementById('list-lock-screen').style.display = 'none';
-    document.getElementById('list-main').style.display = 'block';
-    document.getElementById('list-pin-error').style.display = 'none';
-    renderList();
-  } else {
-    document.getElementById('list-pin-error').style.display = 'block';
-    document.getElementById('list-pin-input').value = '';
-  }
-}
-function lockList(){
-  document.getElementById('list-main').style.display = 'none';
-  document.getElementById('list-lock-screen').style.display = 'block';
-  document.getElementById('list-pin-input').value = '';
-}
-function showChangePinDialog(){
-  var d = document.getElementById('change-pin-dialog');
-  d.style.display = 'flex';
-}
-function changePinConfirm(){
-  var np = document.getElementById('new-pin-input').value.trim();
-  if(np.length >= 4){ 
-    localStorage.setItem(LIST_PIN_KEY, np);
-    document.getElementById('change-pin-dialog').style.display = 'none';
-    alert('密碼已更新！');
-  } else { alert('密碼至少需4位數'); }
-}
 
 var newImgData = null;
 function previewNewImg(input){
@@ -2796,27 +2448,36 @@ function renderList(){
   var container = document.getElementById('list-items-container');
   var countEl = document.getElementById('list-count');
   if(countEl) countEl.textContent = '共 '+data.length+' 項';
+  if(!container) return;
   if(data.length === 0){
     container.innerHTML = '<div style="text-align:center;padding:32px 0;color:var(--text3);font-size:13px"><i class="fa-solid fa-cart-shopping" style="font-size:32px;color:#EDE3CC;display:block;margin-bottom:10px"></i>清單是空的，快加入第一項吧！</div>';
     return;
   }
-  var html = '';
+  var h = '';
   data.forEach(function(item){
-    html += '<div style="background:var(--white);border:1px solid '+(item.done?'#D4C090':'#EDE3CC')+';border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(139,105,20,0.06);opacity:'+(item.done?'0.65':'1')+'">';
-    html += '<div style="display:flex;align-items:flex-start;gap:12px">';
-    // 勾選
-    html += '<button onclick="toggleDone('+item.id+')" style="width:26px;height:26px;border-radius:50%;border:2px solid '+(item.done?'var(--gold)':'#D4C090')+';background:'+(item.done?'var(--gold)':'transparent')+';color:'+(item.done?'var(--dark)':'transparent')+';flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px"><i class="fa-solid fa-check"></i></button>';
-    html += '<div style="flex:1;min-width:0">';
-    html += '<div style="font-size:14px;font-weight:700;color:var(--text);'+(item.done?'text-decoration:line-through;':'')+'margin-bottom:4px">'+item.name+'</div>';
-    if(item.note) html += '<div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:6px">'+item.note+'</div>';
-    if(item.img) html += '<img src="'+item.img+'" style="max-width:100%;max-height:140px;border-radius:8px;border:1px solid #EDE3CC;margin-bottom:6px;display:block">';
-    html += '</div>';
-    // 刪除
-    html += '<button onclick="deleteItem('+item.id+')" style="width:30px;height:30px;border-radius:50%;border:none;background:#FEF0F0;color:#e74c3c;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0"><i class="fa-solid fa-trash"></i></button>';
-    html += '</div></div>';
+    h += '<div style="background:var(--white);border:1px solid '+(item.done?'#D4C090':'#EDE3CC')+';border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:0 2px 10px rgba(139,105,20,0.06);opacity:'+(item.done?'0.65':'1')+'">';
+    h += '<div style="display:flex;align-items:flex-start;gap:12px">';
+    h += '<button onclick="toggleDone('+item.id+')" style="width:26px;height:26px;border-radius:50%;border:2px solid '+(item.done?'var(--gold)':'#D4C090')+';background:'+(item.done?'var(--gold)':'transparent')+';color:'+(item.done?'var(--dark)':'transparent')+';flex-shrink:0;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;margin-top:2px"><i class="fa-solid fa-check"></i></button>';
+    h += '<div style="flex:1;min-width:0">';
+    h += '<div style="font-size:14px;font-weight:700;color:var(--text);'+(item.done?'text-decoration:line-through;':'')+'margin-bottom:4px">'+item.name+'</div>';
+    if(item.note) h += '<div style="font-size:12px;color:var(--text3);line-height:1.6;margin-bottom:6px">'+item.note+'</div>';
+    if(item.img) h += '<img src="'+item.img+'" style="max-width:100%;max-height:140px;border-radius:8px;border:1px solid #EDE3CC;margin-bottom:6px;display:block">';
+    h += '</div>';
+    h += '<button onclick="deleteItem('+item.id+')" style="width:30px;height:30px;border-radius:50%;border:none;background:#FEF0F0;color:#e74c3c;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0"><i class="fa-solid fa-trash"></i></button>';
+    h += '</div></div>';
   });
-  container.innerHTML = html;
+  container.innerHTML = h;
 }
+
+document.addEventListener('DOMContentLoaded', function(){
+  updateKTable();
+  if(document.getElementById('rate-vnd2twd')) document.getElementById('rate-vnd2twd').value = rates.vnd2twd;
+  if(document.getElementById('rate-usd2vnd')) document.getElementById('rate-usd2vnd').value = rates.usd2vnd;
+  ['2026-04-25','2026-04-26','2026-04-27','2026-04-28','2026-04-29'].forEach(function(d,i){
+    fetchWeather(i+1, d);
+  });
+  renderList();
+});
 
 </script>
 </body>

@@ -2523,12 +2523,8 @@ function removeNewImg(){
   newImgData = null;
   document.getElementById('list-new-img-preview').innerHTML = '';
   resetImgInput();
-  // 恢復上傳按鈕文字
-  var wrap = document.getElementById('list-img-wrap');
-  if(wrap) wrap.querySelector('button').innerHTML = '<i class="fa-solid fa-image" style="font-size:15px"></i> 上傳圖片（選填）';
 }
 function resetImgInput(){
-  // 重建 hidden input（確保 onchange 每次都能觸發）
   var old = document.getElementById('list-new-img');
   if(old){
     var newInp = document.createElement('input');
@@ -2539,10 +2535,15 @@ function resetImgInput(){
     newInp.addEventListener('change', function(){ previewNewImg(this); });
     old.parentNode.replaceChild(newInp, old);
   }
-  // 恢復 button 文字（如果被改過）
   var wrap = document.getElementById('list-img-wrap');
   if(wrap){
-    wrap.innerHTML = '<button type="button" onclick="document.getElementById('list-new-img').click()" style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:13px;color:var(--gold-dark);cursor:pointer;font-weight:500;font-family:inherit;-webkit-tap-highlight-color:transparent"><i class=\"fa-solid fa-image\" style=\"font-size:15px\"></i> 上傳圖片（選填）</button>';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.style.cssText = 'display:inline-flex;align-items:center;gap:8px;padding:9px 16px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:13px;color:var(--gold-dark);cursor:pointer;font-weight:500;font-family:inherit;-webkit-tap-highlight-color:transparent';
+    btn.innerHTML = '<i class="fa-solid fa-image" style="font-size:15px"></i> 上傳圖片（選填）';
+    btn.addEventListener('click', function(){ document.getElementById('list-new-img').click(); });
+    wrap.innerHTML = '';
+    wrap.appendChild(btn);
   }
 }
 

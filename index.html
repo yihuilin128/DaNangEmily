@@ -2520,13 +2520,20 @@ function removeNewImg(){
   resetImgInput();
 }
 function resetImgInput(){
-  // 重建 file input，確保下次能正常觸發 onchange
   var wrap = document.getElementById('list-img-wrap');
   if(!wrap) return;
-  wrap.innerHTML = '<label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:12px;color:var(--gold-dark);cursor:pointer;font-weight:500">'
-    +'<i class="fa-solid fa-image"></i> 上傳圖片（選填）'
-    +'<input type="file" accept="image/*" id="list-new-img" style="display:none" onchange="previewNewImg(this)">'
-    +'</label>';
+  var lbl = document.createElement('label');
+  lbl.style.cssText = 'display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:12px;color:var(--gold-dark);cursor:pointer;font-weight:500';
+  lbl.innerHTML = '<i class="fa-solid fa-image"></i> 上傳圖片（選填）';
+  var inp = document.createElement('input');
+  inp.type = 'file';
+  inp.accept = 'image/*';
+  inp.id = 'list-new-img';
+  inp.style.display = 'none';
+  inp.addEventListener('change', function(){ previewNewImg(this); });
+  lbl.appendChild(inp);
+  wrap.innerHTML = '';
+  wrap.appendChild(lbl);
 }
 
 function addListItem(){

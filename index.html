@@ -2284,10 +2284,12 @@
 
             <!-- 圖片上傳 -->
             <div style="margin-bottom:12px">
-              <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:12px;color:var(--gold-dark);cursor:pointer;font-weight:500">
-                <i class="fa-solid fa-image"></i> 上傳圖片（選填）
-                <input type="file" accept="image/*" id="list-new-img" style="display:none" onchange="previewNewImg(this)">
-              </label>
+              <div id="list-img-wrap">
+                <label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:12px;color:var(--gold-dark);cursor:pointer;font-weight:500">
+                  <i class="fa-solid fa-image"></i> 上傳圖片（選填）
+                  <input type="file" accept="image/*" id="list-new-img" style="display:none" onchange="previewNewImg(this)">
+                </label>
+              </div>
               <div id="list-new-img-preview" style="margin-top:8px"></div>
             </div>
 
@@ -2452,10 +2454,27 @@ function previewNewImg(input){
     reader.onload = function(e){
       newImgData = e.target.result;
       document.getElementById('list-new-img-preview').innerHTML =
-        '<img src="'+e.target.result+'" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid #EDE3CC">';
+        '<div style="position:relative;display:inline-block">'
+        +'<img src="'+e.target.result+'" style="max-width:100%;max-height:120px;border-radius:8px;border:1px solid #EDE3CC;display:block">'
+        +'<button onclick="removeNewImg()" style="position:absolute;top:4px;right:4px;width:22px;height:22px;background:rgba(0,0,0,0.55);border:none;border-radius:50%;color:#fff;font-size:11px;cursor:pointer;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-xmark"></i></button>'
+        +'</div>';
     };
     reader.readAsDataURL(input.files[0]);
   }
+}
+function removeNewImg(){
+  newImgData = null;
+  document.getElementById('list-new-img-preview').innerHTML = '';
+  resetImgInput();
+}
+function resetImgInput(){
+  // 重建 file input，確保下次能正常觸發 onchange
+  var wrap = document.getElementById('list-img-wrap');
+  if(!wrap) return;
+  wrap.innerHTML = '<label style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;background:var(--surface);border:1.5px dashed #D4C090;border-radius:var(--radius-sm);font-size:12px;color:var(--gold-dark);cursor:pointer;font-weight:500">'
+    +'<i class="fa-solid fa-image"></i> 上傳圖片（選填）'
+    +'<input type="file" accept="image/*" id="list-new-img" style="display:none" onchange="previewNewImg(this)">'
+    +'</label>';
 }
 
 function addListItem(){
@@ -2467,9 +2486,9 @@ function addListItem(){
   saveListData(data);
   document.getElementById('list-new-name').value = '';
   document.getElementById('list-new-note').value = '';
-  document.getElementById('list-new-img').value = '';
   document.getElementById('list-new-img-preview').innerHTML = '';
   newImgData = null;
+  resetImgInput();
   renderList();
 }
 

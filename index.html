@@ -1249,7 +1249,59 @@
         </div>
       </div>
 
-      <!-- 行程快覽 -->
+            <!-- 飯店房號 -->
+      <div class="content-section">
+        <div class="section-header">
+          <div class="section-icon"><i class="fa-solid fa-door-open"></i></div>
+          <div class="section-title">我的房號</div>
+          <div class="section-line"></div>
+        </div>
+        <div style="background:var(--white);border:1px solid #EDE3CC;border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 10px rgba(139,105,20,0.06)">
+
+          <!-- 會安新世界 Day1-2 -->
+          <div style="padding:14px 16px;border-bottom:1px solid #F5EDD8">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--text)">會安南岸新世界</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px">4/25–4/26（Day 1–2）</div>
+              </div>
+              <div style="font-size:11px;color:var(--text3);background:var(--gold-pale);padding:3px 8px;border-radius:10px;white-space:nowrap">G樓大廳</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:12px;color:var(--text3);flex-shrink:0;width:42px"><i class="fa-solid fa-key" style="color:var(--gold);margin-right:4px"></i>房號</div>
+              <input type="text" id="room-hoiana" placeholder="到了再填，例：1-0512"
+                style="flex:1;height:42px;padding:0 14px;font-size:16px;font-weight:700;letter-spacing:2px;border:1.5px solid #EDE3CC;border-radius:var(--radius-sm);background:var(--white);color:var(--text);outline:none;font-family:inherit"
+                onfocus="this.style.borderColor='var(--gold)'"
+                onblur="this.style.borderColor='#EDE3CC';saveRoom('hoiana',this.value)"
+                oninput="saveRoom('hoiana',this.value)">
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px"><i class="fa-solid fa-circle-info" style="margin-right:3px"></i>房號共5碼：第1碼＝棟別，2–3碼＝樓層，4–5碼＝房號</div>
+          </div>
+
+          <!-- 皇冠假日 Day3-4 -->
+          <div style="padding:14px 16px">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+              <div style="flex:1">
+                <div style="font-size:13px;font-weight:700;color:var(--text)">峴港城中皇冠假日</div>
+                <div style="font-size:11px;color:var(--text3);margin-top:2px">4/27–4/28（Day 3–4）</div>
+              </div>
+              <div style="font-size:11px;color:var(--text3);background:var(--gold-pale);padding:3px 8px;border-radius:10px;white-space:nowrap">1樓大廳</div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <div style="font-size:12px;color:var(--text3);flex-shrink:0;width:42px"><i class="fa-solid fa-key" style="color:var(--gold);margin-right:4px"></i>房號</div>
+              <input type="text" id="room-crowne" placeholder="到了再填，例：1205"
+                style="flex:1;height:42px;padding:0 14px;font-size:16px;font-weight:700;letter-spacing:2px;border:1.5px solid #EDE3CC;border-radius:var(--radius-sm);background:var(--white);color:var(--text);outline:none;font-family:inherit"
+                onfocus="this.style.borderColor='var(--gold)'"
+                onblur="this.style.borderColor='#EDE3CC';saveRoom('crowne',this.value)"
+                oninput="saveRoom('crowne',this.value)">
+            </div>
+            <div style="font-size:11px;color:var(--text3);margin-top:6px"><i class="fa-solid fa-circle-info" style="margin-right:3px"></i>共31層，電梯需感應房卡</div>
+          </div>
+
+        </div>
+      </div>
+
+<!-- 行程快覽 -->
       <div class="content-section">
         <div class="section-header">
           <div class="section-icon"><i class="fa-solid fa-route"></i></div>
@@ -2532,6 +2584,7 @@ function renderList(){
 }
 
 document.addEventListener('DOMContentLoaded', function(){
+  loadRooms();
   updateKTable();
   if(document.getElementById('rate-vnd2twd')) document.getElementById('rate-vnd2twd').value = rates.vnd2twd;
   if(document.getElementById('rate-usd2vnd')) document.getElementById('rate-usd2vnd').value = rates.usd2vnd;
@@ -2556,6 +2609,18 @@ function closeLightbox(){
 document.addEventListener('keydown', function(e){
   if(e.key === 'Escape') closeLightbox();
 });
+
+
+// 飯店房號儲存
+function saveRoom(key, val){
+  localStorage.setItem('room_'+key, val);
+}
+function loadRooms(){
+  var h = document.getElementById('room-hoiana');
+  var c = document.getElementById('room-crowne');
+  if(h){ var v=localStorage.getItem('room_hoiana'); if(v) h.value=v; }
+  if(c){ var v=localStorage.getItem('room_crowne'); if(v) c.value=v; }
+}
 
 </script>
 </body>

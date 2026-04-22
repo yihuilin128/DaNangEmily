@@ -2509,40 +2509,38 @@ function toggleSpa(id){
 // ══ 清單功能 ══
 // ══ IndexedDB 儲存 ══
 var _listCache = [];
-var _dbReady = false;
-var _db = null;
+var DB_NAME = 'yh_list_db';
+var DB_VER = 1;
 
-function initDB(callback){
-  if(_dbReady){ if(callback) callback(); return; }
+function openDB(callback){
   try{
-    var req = indexedDB.open('yh_list_db', 1);
+    var req = indexedDB.open(DB_NAME, DB_VER);
     req.onupgradeneeded = function(e){
       var db = e.target.result;
       if(!db.objectStoreNames.contains('items')){
         db.createObjectStore('items', {keyPath:'id'});
       }
     };
-    req.onsuccess = function(e){
-      _db = e.target.result;
-      _dbReady = true;
-      // 載入資料到快取
-      var tx = _db.transaction('items','readonly');
+    req.onsuccess = function(e){ callback(null, e.target.result); };
+    req.onerror = function(e){ callback(e, null); };
+  }catch(e){ callback(e, null); }
+}
+
+function loadFromDB(callback){
+  openDB(function(err, db){
+    if(err || !db){ if(callback) callback(); return; }
+    try{
+      var tx = db.transaction('items','readonly');
       var store = tx.objectStore('items');
-      var all = store.getAll();
-      all.onsuccess = function(){
-        _listCache = (all.result||[]).sort(function(a,b){return b.id-a.id;});
+      var req = store.getAll();
+      req.onsuccess = function(){
+        _listCache = (req.result||[]).sort(function(a,b){return b.id-a.id;});
+        db.close();
         if(callback) callback();
       };
-      all.onerror = function(){ if(callback) callback(); };
-    };
-    req.onerror = function(){
-      _dbReady = true;
-      if(callback) callback();
-    };
-  }catch(e){
-    _dbReady = true;
-    if(callback) callback();
-  }
+      req.onerror = function(){ db.close(); if(callback) callback(); };
+    }catch(e){ db.close(); if(callback) callback(); }
+  });
 }
 
 function getListData(){
@@ -2551,13 +2549,17 @@ function getListData(){
 
 function saveListData(data){
   _listCache = data;
-  if(!_db) return;
-  try{
-    var tx = _db.transaction('items','readwrite');
-    var store = tx.objectStore('items');
-    store.clear();
-    data.forEach(function(item){ store.put(item); });
-  }catch(e){}
+  openDB(function(err, db){
+    if(err || !db) return;
+    try{
+      var tx = db.transaction('items','readwrite');
+      var store = tx.objectStore('items');
+      store.clear();
+      data.forEach(function(item){ store.put(item); });
+      tx.oncomplete = function(){ db.close(); };
+      tx.onerror = function(){ db.close(); };
+    }catch(e){ db.close(); }
+  });
 }
 
 // 圖片資料存在 hidden div，避免全域變數問題

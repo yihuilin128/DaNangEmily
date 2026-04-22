@@ -2515,26 +2515,25 @@ var _listCache = [];
 function saveListData(data){
   _listCache = data;
   try{
-    // 圖片單獨存 sessionStorage（tab 內有效）
+    // 圖片存 sessionStorage
     var imgs = {};
     data.forEach(function(item){ if(item.img) imgs[item.id] = item.img; });
-    sessionStorage.setItem('yh_imgs', JSON.stringify(imgs));
-    // 文字清單（不含圖片）存 hash
+    try{ sessionStorage.setItem('yh_imgs', JSON.stringify(imgs)); }catch(e){}
+    // 文字清單存 hash（用 encodeURIComponent，不用 btoa）
     var slim = data.map(function(item){
       return {id:item.id, name:item.name, note:item.note||'', done:item.done||false};
     });
-    var hash = getCurrentHash();
-    hash.list = btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
-    setHashData(hash);
+    _hashData.list = encodeURIComponent(JSON.stringify(slim));
+    flushHash();
   }catch(e){}
 }
 
 // 讀取：從 hash 讀文字，從 sessionStorage 補圖片
 function loadListData(){
   try{
-    var hash = getCurrentHash();
-    if(!hash.list){ _listCache = []; return; }
-    var slim = JSON.parse(decodeURIComponent(escape(atob(hash.list))));
+    var raw = _hashData.list;
+    if(!raw){ _listCache = []; return; }
+    var slim = JSON.parse(decodeURIComponent(raw));
     var imgs = {};
     try{ imgs = JSON.parse(sessionStorage.getItem('yh_imgs')||'{}'); }catch(e){}
     _listCache = slim.map(function(item){
@@ -2545,35 +2544,34 @@ function loadListData(){
 
 function getListData(){ return _listCache; }
 
-// ── URL Hash 工具 ──
-function getCurrentHash(){
+// ── URL Hash 工具（單一物件，避免互相覆蓋）──
+var _hashData = {};
+function parseHash(){
   try{
     var h = location.hash.replace('#','');
-    if(!h) return {};
-    var obj = {};
+    if(!h){ _hashData = {}; return; }
+    _hashData = {};
     h.split('&').forEach(function(p){
-      var kv = p.split('=');
-      if(kv[0]) obj[kv[0]] = kv[1]||'';
+      var eq = p.indexOf('=');
+      if(eq>0) _hashData[p.substring(0,eq)] = p.substring(eq+1);
     });
-    return obj;
-  }catch(e){ return {}; }
+  }catch(e){ _hashData = {}; }
 }
-function setHashData(obj){
+function flushHash(){
   try{
     var parts = [];
-    Object.keys(obj).forEach(function(k){ if(obj[k]) parts.push(k+'='+obj[k]); });
-    history.replaceState(null, '', '#'+parts.join('&'));
+    Object.keys(_hashData).forEach(function(k){
+      if(_hashData[k]) parts.push(k+'='+_hashData[k]);
+    });
+    history.replaceState(null, '', parts.length ? '#'+parts.join('&') : location.pathname);
   }catch(e){}
 }
 function saveCurrentTab(tabId){
-  try{
-    var hash = getCurrentHash();
-    hash.tab = tabId;
-    setHashData(hash);
-  }catch(e){}
+  _hashData.tab = tabId;
+  flushHash();
 }
 function getSavedTab(){
-  try{ return getCurrentHash().tab || 'myinfo'; }catch(e){ return 'myinfo'; }
+  return _hashData.tab || 'myinfo';
 }
 
 // 圖片資料存在 hidden div，避免全域變數問題

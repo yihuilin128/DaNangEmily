@@ -2659,6 +2659,26 @@ function renderList(){
   });
   container.innerHTML = h;
 }
+
+// ── Lightbox ──
+function openLightbox(src){
+  var overlay = document.getElementById('lightbox-overlay');
+  var img = document.getElementById('lightbox-img');
+  if(!overlay || !img) return;
+  img.src = src;
+  overlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  var overlay = document.getElementById('lightbox-overlay');
+  var img = document.getElementById('lightbox-img');
+  if(overlay) overlay.classList.remove('active');
+  if(img) img.src = '';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') closeLightbox();
+});
 </script>
 </body>
 </html>

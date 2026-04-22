@@ -2396,6 +2396,7 @@ function showScreen(id, tabEl) {
     tabEl.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
   }
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  saveCurrentTab(id);
 }
 
 // 天氣功能
@@ -2507,59 +2508,72 @@ function toggleSpa(id){
 
 
 // ══ 清單功能 ══
-// ══ IndexedDB 儲存 ══
+// ══ 清單儲存（記憶體 + URL hash）══
 var _listCache = [];
-var DB_NAME = 'yh_list_db';
-var DB_VER = 1;
 
-function openDB(callback){
-  try{
-    var req = indexedDB.open(DB_NAME, DB_VER);
-    req.onupgradeneeded = function(e){
-      var db = e.target.result;
-      if(!db.objectStoreNames.contains('items')){
-        db.createObjectStore('items', {keyPath:'id'});
-      }
-    };
-    req.onsuccess = function(e){ callback(null, e.target.result); };
-    req.onerror = function(e){ callback(e, null); };
-  }catch(e){ callback(e, null); }
-}
-
-function loadFromDB(callback){
-  openDB(function(err, db){
-    if(err || !db){ if(callback) callback(); return; }
-    try{
-      var tx = db.transaction('items','readonly');
-      var store = tx.objectStore('items');
-      var req = store.getAll();
-      req.onsuccess = function(){
-        _listCache = (req.result||[]).sort(function(a,b){return b.id-a.id;});
-        db.close();
-        if(callback) callback();
-      };
-      req.onerror = function(){ db.close(); if(callback) callback(); };
-    }catch(e){ db.close(); if(callback) callback(); }
-  });
-}
-
-function getListData(){
-  return _listCache;
-}
-
+// 儲存：文字存 hash，圖片存 sessionStorage
 function saveListData(data){
   _listCache = data;
-  openDB(function(err, db){
-    if(err || !db) return;
-    try{
-      var tx = db.transaction('items','readwrite');
-      var store = tx.objectStore('items');
-      store.clear();
-      data.forEach(function(item){ store.put(item); });
-      tx.oncomplete = function(){ db.close(); };
-      tx.onerror = function(){ db.close(); };
-    }catch(e){ db.close(); }
-  });
+  try{
+    // 圖片單獨存 sessionStorage（tab 內有效）
+    var imgs = {};
+    data.forEach(function(item){ if(item.img) imgs[item.id] = item.img; });
+    sessionStorage.setItem('yh_imgs', JSON.stringify(imgs));
+    // 文字清單（不含圖片）存 hash
+    var slim = data.map(function(item){
+      return {id:item.id, name:item.name, note:item.note||'', done:item.done||false};
+    });
+    var hash = getCurrentHash();
+    hash.list = btoa(unescape(encodeURIComponent(JSON.stringify(slim))));
+    setHashData(hash);
+  }catch(e){}
+}
+
+// 讀取：從 hash 讀文字，從 sessionStorage 補圖片
+function loadListData(){
+  try{
+    var hash = getCurrentHash();
+    if(!hash.list){ _listCache = []; return; }
+    var slim = JSON.parse(decodeURIComponent(escape(atob(hash.list))));
+    var imgs = {};
+    try{ imgs = JSON.parse(sessionStorage.getItem('yh_imgs')||'{}'); }catch(e){}
+    _listCache = slim.map(function(item){
+      return {id:item.id, name:item.name, note:item.note||'', done:item.done||false, img:imgs[item.id]||null};
+    });
+  }catch(e){ _listCache = []; }
+}
+
+function getListData(){ return _listCache; }
+
+// ── URL Hash 工具 ──
+function getCurrentHash(){
+  try{
+    var h = location.hash.replace('#','');
+    if(!h) return {};
+    var obj = {};
+    h.split('&').forEach(function(p){
+      var kv = p.split('=');
+      if(kv[0]) obj[kv[0]] = kv[1]||'';
+    });
+    return obj;
+  }catch(e){ return {}; }
+}
+function setHashData(obj){
+  try{
+    var parts = [];
+    Object.keys(obj).forEach(function(k){ if(obj[k]) parts.push(k+'='+obj[k]); });
+    history.replaceState(null, '', '#'+parts.join('&'));
+  }catch(e){}
+}
+function saveCurrentTab(tabId){
+  try{
+    var hash = getCurrentHash();
+    hash.tab = tabId;
+    setHashData(hash);
+  }catch(e){}
+}
+function getSavedTab(){
+  try{ return getCurrentHash().tab || 'myinfo'; }catch(e){ return 'myinfo'; }
 }
 
 // 圖片資料存在 hidden div，避免全域變數問題

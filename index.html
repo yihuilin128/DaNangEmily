@@ -2339,8 +2339,7 @@
             <div style="margin-bottom:12px">
               <form id="list-img-form" style="display:inline">
                 <input type="file" accept="image/*" id="list-new-img"
-                  style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0,0,0,0)"
-                  onchange="previewNewImg(this)">
+                  style="position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0,0,0,0)">
               </form>
               <div id="list-img-wrap">
                 <button type="button" onclick="document.getElementById('list-new-img').click()"
@@ -2484,12 +2483,36 @@ function updateKTable(){
   tbl.innerHTML = html;
 }
 document.addEventListener('DOMContentLoaded',function(){
+  // 解析 URL hash
+  parseHash();
+  // 匯率工具
   updateKTable();
   if(document.getElementById('rate-vnd2twd')) document.getElementById('rate-vnd2twd').value = rates.vnd2twd;
   if(document.getElementById('rate-usd2vnd')) document.getElementById('rate-usd2vnd').value = rates.usd2vnd;
+  // 天氣
   ['2026-04-25','2026-04-26','2026-04-27','2026-04-28','2026-04-29'].forEach(function(d,i){
     fetchWeather(i+1, d);
   });
+  // 房號
+  try { loadRooms(); } catch(e) {}
+  // 圖片 input 綁定（比 inline onchange 更可靠）
+  var imgInput = document.getElementById('list-new-img');
+  if(imgInput) imgInput.addEventListener('change', function(){ previewNewImg(this); });
+  // 讀清單
+  loadListData();
+  renderList();
+  // 恢復分頁
+  var savedTab = getSavedTab();
+  var tabs = document.querySelectorAll('.nav-tab');
+  var found = false;
+  tabs.forEach(function(t){
+    var oc = t.getAttribute('onclick')||'';
+    if(oc.indexOf("'"+savedTab+"'") >= 0){
+      showScreen(savedTab, t);
+      found = true;
+    }
+  });
+  if(!found && tabs[0]) showScreen('myinfo', tabs[0]);
 });
 
 // SPA 下拉展開
@@ -2608,12 +2631,31 @@ function removeNewImg(){
 
 function resetImgInput(){
   setImgData('');
+  // 完全重建 input（最可靠，避免 iOS onchange 不觸發）
   var form = document.getElementById('list-img-form');
-  if(form) form.reset();
+  if(form){
+    var oldInput = document.getElementById('list-new-img');
+    if(oldInput) form.removeChild(oldInput);
+    var newInput = document.createElement('input');
+    newInput.type = 'file';
+    newInput.accept = 'image/*';
+    newInput.id = 'list-new-img';
+    newInput.style.cssText = 'position:absolute;width:1px;height:1px;opacity:0;overflow:hidden;clip:rect(0,0,0,0)';
+    newInput.addEventListener('change', function(){ previewNewImg(this); });
+    form.appendChild(newInput);
+  }
+  // 恢復按鈕文字
   var wrap = document.getElementById('list-img-wrap');
   if(wrap){
     var btn = wrap.querySelector('button');
-    if(btn) btn.innerHTML = '<i class="fa-solid fa-image" style="font-size:15px"></i> 上傳圖片（選填）';
+    if(btn){
+      var icon = document.createElement('i');
+      icon.className = 'fa-solid fa-image';
+      icon.style.fontSize = '15px';
+      btn.innerHTML = '';
+      btn.appendChild(icon);
+      btn.appendChild(document.createTextNode(' 上傳圖片（選填）'));
+    }
   }
 }
 

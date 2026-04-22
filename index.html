@@ -2498,9 +2498,12 @@ document.addEventListener('DOMContentLoaded',function(){
   // 圖片 input 綁定（比 inline onchange 更可靠）
   var imgInput = document.getElementById('list-new-img');
   if(imgInput) imgInput.addEventListener('change', function(){ previewNewImg(this); });
-  // 讀清單
-  loadListData();
-  renderList();
+  // 開 IDB 再讀清單（圖片從 IDB 補回）
+  openImgDB(function(){
+    loadListData(function(){
+      renderList();
+    });
+  });
   // 恢復分頁
   var savedTab = getSavedTab();
   var tabs = document.querySelectorAll('.nav-tab');
@@ -2531,38 +2534,96 @@ function toggleSpa(id){
 
 
 // ══ 清單功能 ══
-// ══ 清單儲存（記憶體 + URL hash）══
+// ══ 清單儲存：文字→hash，圖片→IndexedDB ══
 var _listCache = [];
+var _imgDB = null;
 
-// 儲存：文字存 hash，圖片存 sessionStorage
+// ── IndexedDB（只存圖片）──
+function openImgDB(cb){
+  try{
+    var r = indexedDB.open('yh_img_db', 1);
+    r.onupgradeneeded = function(e){
+      var db = e.target.result;
+      if(!db.objectStoreNames.contains('imgs'))
+        db.createObjectStore('imgs'); // key=item.id
+    };
+    r.onsuccess = function(e){ _imgDB = e.target.result; if(cb) cb(); };
+    r.onerror   = function(){ if(cb) cb(); };
+  }catch(e){ if(cb) cb(); }
+}
+
+function saveImgToDB(id, dataUrl){
+  if(!_imgDB || !dataUrl) return;
+  try{
+    var tx = _imgDB.transaction('imgs','readwrite');
+    tx.objectStore('imgs').put(dataUrl, id);
+  }catch(e){}
+}
+
+function deleteImgFromDB(id){
+  if(!_imgDB) return;
+  try{
+    var tx = _imgDB.transaction('imgs','readwrite');
+    tx.objectStore('imgs').delete(id);
+  }catch(e){}
+}
+
+function loadAllImgs(cb){
+  if(!_imgDB){ cb({}); return; }
+  try{
+    var tx = _imgDB.transaction('imgs','readonly');
+    var store = tx.objectStore('imgs');
+    var req = store.getAllKeys();
+    req.onsuccess = function(){
+      var keys = req.result;
+      var imgs = {};
+      var pending = keys.length;
+      if(pending === 0){ cb(imgs); return; }
+      keys.forEach(function(k){
+        var r2 = store.get(k);
+        r2.onsuccess = function(){
+          imgs[k] = r2.result;
+          pending--;
+          if(pending === 0) cb(imgs);
+        };
+        r2.onerror = function(){ pending--; if(pending===0) cb(imgs); };
+      });
+    };
+    req.onerror = function(){ cb({}); };
+  }catch(e){ cb({}); }
+}
+
+// ── 主要 save/load ──
 function saveListData(data){
   _listCache = data;
+  // 文字存 hash
   try{
-    // 圖片存 sessionStorage
-    var imgs = {};
-    data.forEach(function(item){ if(item.img) imgs[item.id] = item.img; });
-    try{ sessionStorage.setItem('yh_imgs', JSON.stringify(imgs)); }catch(e){}
-    // 文字清單存 hash（用 encodeURIComponent，不用 btoa）
     var slim = data.map(function(item){
       return {id:item.id, name:item.name, note:item.note||'', done:item.done||false};
     });
     _hashData.list = encodeURIComponent(JSON.stringify(slim));
     flushHash();
   }catch(e){}
+  // 圖片存 IndexedDB
+  data.forEach(function(item){
+    if(item.img) saveImgToDB(item.id, item.img);
+  });
 }
 
-// 讀取：從 hash 讀文字，從 sessionStorage 補圖片
-function loadListData(){
+function loadListData(cb){
   try{
     var raw = _hashData.list;
-    if(!raw){ _listCache = []; return; }
+    if(!raw){ _listCache = []; if(cb) cb(); return; }
     var slim = JSON.parse(decodeURIComponent(raw));
-    var imgs = {};
-    try{ imgs = JSON.parse(sessionStorage.getItem('yh_imgs')||'{}'); }catch(e){}
-    _listCache = slim.map(function(item){
-      return {id:item.id, name:item.name, note:item.note||'', done:item.done||false, img:imgs[item.id]||null};
+    // 從 IDB 補回圖片
+    loadAllImgs(function(imgs){
+      _listCache = slim.map(function(item){
+        return {id:item.id, name:item.name, note:item.note||'',
+                done:item.done||false, img:imgs[item.id]||null};
+      });
+      if(cb) cb();
     });
-  }catch(e){ _listCache = []; }
+  }catch(e){ _listCache = []; if(cb) cb(); }
 }
 
 function getListData(){ return _listCache; }
@@ -2685,6 +2746,7 @@ function toggleDone(id){
 }
 function deleteItem(id){
   if(!confirm('確定要刪除這個項目嗎？')) return;
+  deleteImgFromDB(id);
   var data = getListData().filter(function(d){ return d.id!==id; });
   saveListData(data);
   renderList();
